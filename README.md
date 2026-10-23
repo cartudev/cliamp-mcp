@@ -27,17 +27,21 @@ names and parameters. A submitted job is polled until it finishes.
 The server is a normal program. Any MCP client that can launch a local stdio
 command can use it. OpenCode is not required.
 
+Install straight from the repository. There is no release tag; `@main` is the
+module version Go fetches from GitHub:
+
 ```sh
-go install github.com/cartudev/cliamp-mcp@latest
+go install github.com/cartudev/cliamp-mcp@main
 ```
 
-That puts `cliamp-mcp` in `$(go env GOPATH)/bin`. Put that directory on `PATH`,
-or pass the absolute path in the client config. Go 1.26.10 or newer.
+That puts `cliamp-mcp` in `$(go env GOPATH)/bin` (often `~/go/bin`). Put that
+directory on `PATH`, or pass the absolute path in the client config. Go 1.26.10
+or newer. `@latest` does not resolve until a `vX.Y.Z` tag exists.
 
-From a checkout:
+From a checkout of this repo:
 
 ```sh
-go build -o ~/.local/bin/cliamp-mcp .
+go install .
 ```
 
 cliamp must already be running, either the TUI or `cliamp --daemon`. The server
