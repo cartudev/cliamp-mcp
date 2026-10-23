@@ -27,8 +27,20 @@ names and parameters. A submitted job is polled until it finishes.
 The server is a normal program. Any MCP client that can launch a local stdio
 command can use it. OpenCode is not required.
 
-Install straight from the repository. There is no release tag; `@main` is the
-module version Go fetches from GitHub:
+Download a release binary. No Go toolchain required. Pick the archive that
+matches the machine and put the file on `PATH` as `cliamp-mcp`:
+
+```sh
+curl -fsSL -o ~/.local/bin/cliamp-mcp \
+  https://github.com/cartudev/cliamp-mcp/releases/latest/download/cliamp-mcp-linux-amd64
+chmod +x ~/.local/bin/cliamp-mcp
+```
+
+Other names: `cliamp-mcp-linux-arm64`, `cliamp-mcp-darwin-amd64`,
+`cliamp-mcp-darwin-arm64`, `cliamp-mcp-windows-amd64.exe`. Checksums are in
+`checksums.txt` on the same release.
+
+To build from the repository instead:
 
 ```sh
 go install github.com/cartudev/cliamp-mcp@main
