@@ -76,7 +76,16 @@ Use the absolute path when the client does not inherit your `PATH`.
 | VS Code Copilot | MCP config → `servers` / `mcpServers`, command `cliamp-mcp` |
 | Anything else | stdio transport, command `cliamp-mcp`, no args, no URL |
 
-OpenCode uses a different file shape. Under `mcp` in `opencode.json`:
+OpenCode does not install the program. It only starts a local command. Skip
+`go install` and let the first launch fetch the module:
+
+```sh
+opencode mcp add cliamp -- go run github.com/cartudev/cliamp-mcp@main
+```
+
+That still needs a Go toolchain on `PATH`. There is no OpenCode plugin package
+for this repo, and `opencode plugin add` will not build it. The equivalent
+config, if you already installed the binary, is:
 
 ```json
 "cliamp": {
