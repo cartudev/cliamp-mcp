@@ -52,6 +52,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
           path: dist
@@ -65,9 +66,13 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          notes=$(mktemp)
+          cat > "$notes" <<'EOF'
+          Binaries for the local MCP server. No Go toolchain required.
+
+          Put the matching file on PATH as cliamp-mcp (on Windows, cliamp-mcp.exe).
+          Verify the download against checksums.txt.
+          EOF
           gh release create "$GITHUB_REF_NAME" dist/* \
             --title "$GITHUB_REF_NAME" \
-            --notes "Binaries for the local MCP server. No Go toolchain required.
-
-          Put the matching file on PATH as \`cliamp-mcp\` (on Windows, \`cliamp-mcp.exe\`).
-          Verify the download against \`checksums.txt\`."
+            --notes-file "$notes"
