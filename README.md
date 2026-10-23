@@ -37,8 +37,9 @@ chmod +x ~/.local/bin/cliamp-mcp
 ```
 
 Other names: `cliamp-mcp-linux-arm64`, `cliamp-mcp-darwin-amd64`,
-`cliamp-mcp-darwin-arm64`, `cliamp-mcp-windows-amd64.exe`. Checksums are in
-`checksums.txt` on the same release.
+`cliamp-mcp-darwin-arm64`, `cliamp-mcp-windows-amd64.exe`,
+`cliamp-mcp-windows-arm64.exe`. Checksums are in `checksums.txt` on the same
+release.
 
 To build from the repository instead:
 
@@ -48,7 +49,7 @@ go install github.com/cartudev/cliamp-mcp@main
 
 That puts `cliamp-mcp` in `$(go env GOPATH)/bin` (often `~/go/bin`). Put that
 directory on `PATH`, or pass the absolute path in the client config. Go 1.26.10
-or newer. `@latest` does not resolve until a `vX.Y.Z` tag exists.
+or newer. `@latest` follows the newest `vX.Y.Z` tag. `@main` follows the branch.
 
 From a checkout of this repo:
 
