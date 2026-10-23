@@ -22,23 +22,62 @@ only exists while cliamp runs, and only the owning user can connect to it.
 `provider.load`, `queue.enqueue`, and so on. Ask `cliamp_capabilities` for the
 names and parameters. A submitted job is polled until it finishes.
 
-## Build
+## Install
+
+The server is a normal program. Any MCP client that can launch a local stdio
+command can use it. OpenCode is not required.
+
+```sh
+go install github.com/cartudev/cliamp-mcp@latest
+```
+
+That puts `cliamp-mcp` in `$(go env GOPATH)/bin`. Put that directory on `PATH`,
+or pass the absolute path in the client config. Go 1.26.10 or newer.
+
+From a checkout:
 
 ```sh
 go build -o ~/.local/bin/cliamp-mcp .
 ```
 
-Requires Go 1.26.10 or newer. cliamp must already be running (the TUI or
-`cliamp --daemon`). Override the socket with `CLIAMP_SOCKET` when
-`CLIAMP_CONFIG_DIR` is set.
+cliamp must already be running, either the TUI or `cliamp --daemon`. The server
+does not start the player. If `CLIAMP_CONFIG_DIR` is set, point the server at
+the same socket:
 
-## OpenCode
+```sh
+CLIAMP_SOCKET="$CLIAMP_CONFIG_DIR/cliamp.sock" cliamp-mcp
+```
+
+## Client config
+
+The process speaks MCP on stdin/stdout and never opens a port. Clients that
+use the common `mcpServers` map only need the command:
+
+```json
+{
+  "mcpServers": {
+    "cliamp": {
+      "command": "cliamp-mcp"
+    }
+  }
+}
+```
+
+Use the absolute path when the client does not inherit your `PATH`.
+
+| Client | Where |
+| --- | --- |
+| Claude Desktop | `claude_desktop_config.json` → `mcpServers` |
+| Cursor | `~/.cursor/mcp.json` or `.cursor/mcp.json` → `mcpServers` |
+| VS Code Copilot | MCP config → `servers` / `mcpServers`, command `cliamp-mcp` |
+| Anything else | stdio transport, command `cliamp-mcp`, no args, no URL |
+
+OpenCode uses a different file shape. Under `mcp` in `opencode.json`:
 
 ```json
 "cliamp": {
   "type": "local",
-  "command": ["/home/you/.local/bin/cliamp-mcp"],
-  "enabled": true
+  "command": ["cliamp-mcp"]
 }
 ```
 
