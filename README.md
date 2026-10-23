@@ -25,10 +25,22 @@ names and parameters. A submitted job is polled until it finishes.
 ## Install
 
 The server is a normal program. Any MCP client that can launch a local stdio
-command can use it. OpenCode is not required.
+command can use it. OpenCode is not required. cliamp must already be running
+(the TUI or `cliamp --daemon`). This program does not start the player.
 
-Download a release binary. No Go toolchain required. Pick the archive that
-matches the machine and put the file on `PATH` as `cliamp-mcp`:
+No Go toolchain is required. Download the release file for the machine, name it
+`cliamp-mcp`, and put it on `PATH`. Check `checksums.txt` on the same release.
+
+| Machine | File |
+| --- | --- |
+| Linux x86_64 | `cliamp-mcp-linux-amd64` |
+| Linux arm64 | `cliamp-mcp-linux-arm64` |
+| macOS Intel | `cliamp-mcp-darwin-amd64` |
+| macOS Apple silicon | `cliamp-mcp-darwin-arm64` |
+| Windows x86_64 | `cliamp-mcp-windows-amd64.exe` |
+| Windows arm64 | `cliamp-mcp-windows-arm64.exe` |
+
+Linux or macOS, x86_64. On Apple silicon or Linux arm64, change the filename.
 
 ```sh
 curl -fsSL -o ~/.local/bin/cliamp-mcp \
@@ -36,33 +48,45 @@ curl -fsSL -o ~/.local/bin/cliamp-mcp \
 chmod +x ~/.local/bin/cliamp-mcp
 ```
 
-Other names: `cliamp-mcp-linux-arm64`, `cliamp-mcp-darwin-amd64`,
-`cliamp-mcp-darwin-arm64`, `cliamp-mcp-windows-amd64.exe`,
-`cliamp-mcp-windows-arm64.exe`. Checksums are in `checksums.txt` on the same
-release.
-
-To build from the repository instead:
-
 ```sh
-go install github.com/cartudev/cliamp-mcp@main
+curl -fsSL -o ~/.local/bin/cliamp-mcp \
+  https://github.com/cartudev/cliamp-mcp/releases/latest/download/cliamp-mcp-darwin-arm64
+chmod +x ~/.local/bin/cliamp-mcp
 ```
 
-That puts `cliamp-mcp` in `$(go env GOPATH)/bin` (often `~/go/bin`). Put that
-directory on `PATH`, or pass the absolute path in the client config. Go 1.26.10
-or newer. `@latest` follows the newest `vX.Y.Z` tag. `@main` follows the branch.
+Windows, from PowerShell. Change `amd64` to `arm64` on an ARM machine. Put that
+directory on `PATH`, or pass the full path in the client config.
 
-From a checkout of this repo:
-
-```sh
-go install .
+```powershell
+$dir = "$env:LOCALAPPDATA\cliamp-mcp"
+New-Item -ItemType Directory -Force -Path $dir | Out-Null
+Invoke-WebRequest `
+  -Uri https://github.com/cartudev/cliamp-mcp/releases/latest/download/cliamp-mcp-windows-amd64.exe `
+  -OutFile "$dir\cliamp-mcp.exe"
 ```
 
-cliamp must already be running, either the TUI or `cliamp --daemon`. The server
-does not start the player. If `CLIAMP_CONFIG_DIR` is set, point the server at
-the same socket:
+If `CLIAMP_CONFIG_DIR` is set, the server must use the same socket:
 
 ```sh
 CLIAMP_SOCKET="$CLIAMP_CONFIG_DIR/cliamp.sock" cliamp-mcp
+```
+
+On Windows the variable is `CLIAMP_SOCKET`.
+
+### Build instead of downloading
+
+Go 1.26.10 or newer. `@latest` follows the newest `vX.Y.Z` tag. `@main` follows
+the branch. The binary lands in `$(go env GOPATH)/bin`, often `~/go/bin`.
+
+```sh
+go install github.com/cartudev/cliamp-mcp@latest
+go install github.com/cartudev/cliamp-mcp@main
+```
+
+From a checkout:
+
+```sh
+go install .
 ```
 
 ## Client config
@@ -80,7 +104,8 @@ use the common `mcpServers` map only need the command:
 }
 ```
 
-Use the absolute path when the client does not inherit your `PATH`.
+Use the absolute path when the client does not inherit your `PATH`. On Windows
+the command is `cliamp-mcp.exe`.
 
 | Client | Where |
 | --- | --- |
